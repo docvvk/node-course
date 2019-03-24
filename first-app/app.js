@@ -44,7 +44,7 @@ fs.readdir('./',function(err, files) {
 // console.log(files)
 
 
-// const EventEmitter = require('events');
+// const EventE mitter = require('events');
 // const emitter = new EventEmitter;
 
 // Listener calls when event is raised 
