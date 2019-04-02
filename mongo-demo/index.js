@@ -13,11 +13,50 @@ mongoose
   );
 
 const courseSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+    // match: /RgEx/,
+
+  },
+  category: {
+    type: String,
+    required: true,
+    lowercase: true,
+    // uppercase: true,
+    // trim: true,
+    enum: ['web', 'mobile', 'network']
+  },
   author: String,
-  tags: [String],
+  tags: {
+    type: Array,
+
+    validate: {
+      isAsync: true,
+
+      // custom validator  // Async validator
+      validator: function(v, callback) { 
+        // Do some async work
+        setTimeout(() => {
+          const result =  v && v.length > 0;     // if v is true and v.length > 0 then return
+          callback(result);
+        }, 1000);
+      },
+    message: 'Atleast one tag required...'
+    }
+  },
   date: { type: Date, default: Date.now },
-  isPublished: Boolean
+  isPublished: Boolean,
+  price: {
+    type: Number,
+    required: function() { return this.isPublished; },
+    min: 10,
+    max: 200,  // also for dates
+    get: v => Math.round(v),
+    set: v => Math.round(v)
+  }
 });
 
 // Schema Types -- String/Number/Date/Buffer/Boolean/ObjectID/Array
@@ -28,18 +67,28 @@ const Course = mongoose.model("Course", courseSchema);
 
 async function createCourse() {
   const course = new Course({
-    name: "Javascript Course",
-    author: "Shaurya Malhan",
-    tags: ["frontend", "backend"],
-    isPublished: true
+    name: "JS Course",
+    author: "Vvk tiep",
+    tags: ['a'],
+    isPublished: true,
+    price: 30.73827,
+    category: 'WEB'
   });
-
-  const result = await course.save();
-  console.log(result);
+  try {
+    // await course.validate();
+    const result = await course.save();
+    // console.log(course);
+    console.log(result);
+  }
+  catch (e) {
+    for (field in e.errors)
+      console.log(`${e.errors[field].message} ${e.errors[field].kind} `);
+  }
 }
 
 
-// createCourse();
+createCourse();
+
 // Querying Documents
 
 // Logical Query Operators // or // and
