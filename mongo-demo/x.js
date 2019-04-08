@@ -56,3 +56,13 @@ async function listBooks() {
 // createBook( 'Node', '5ca9093ee607cb19f05f8815');
 
 listBooks();
+
+// 
+
+// Authorization -- user is authorized to do some operation -- permissions
+// Authentication -- user is authentic 
+
+// Register: POST /api/users { name, email, password }
+// Login: POST /api/logins
+
+
