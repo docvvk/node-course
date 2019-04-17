@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-const winston = require("winston");
+const config = require('config');
 
 module.exports = function() {
+  const db = config.get('db');
   mongoose
-    .connect("mongodb://localhost/vidly", { useNewUrlParser: true })
-    .then(() => console.log("Connected to MongoDB..."));
+    .connect(config.get('db'), {useNewUrlParser: true})
+    .then(() => console.log(`Connected to ${db}...`));
 };
